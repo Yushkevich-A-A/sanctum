@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('token/create', [\App\Http\Controllers\ApiTokenController::class, 'createToken']);
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('/user', \App\Http\Controllers\UserController::class);
+Route::post('/token/create', [\App\Http\Controllers\ApiTokenController::class, 'createToken']);
+
+Route::middleware('auth:sanctum')->group(function() {
+          Route::get('/user', function (Request $request) {
+              return $request->user();
+          });
     Route::apiResource('/car', \App\Http\Controllers\CarsController::class);
 });
 

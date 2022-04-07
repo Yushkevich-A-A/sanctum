@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ApiTokenRequest;
-use http\Client\Curl\User;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class ApiTokenController extends Controller
 {
