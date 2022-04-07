@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cars;
-use Illuminate\Http\Request;
+use App\Http\Requests\CarRequest;
+use phpDocumentor\Reflection\Types\Integer;
 
 class CarsController extends Controller
 {
@@ -18,15 +19,14 @@ class CarsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    public function store(CarRequest $request)
     {
-        var_dump(1);
-        //
+        return Cars::create($request->validated());
     }
 
     /**
@@ -35,21 +35,24 @@ class CarsController extends Controller
      * @param  \App\Models\Cars  $cars
      * @return \Illuminate\Http\Response
      */
-    public function show(Cars $cars)
+    public function show(int $id)
     {
-        //
+        return Cars::findOrFail($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  CarRequest  $request
      * @param  \App\Models\Cars  $cars
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cars $cars)
+    public function update(CarRequest $request, Cars $cars, int $id)
     {
-        //
+//        var_dump($id);
+        $car = $cars->findOrFail($id);
+        $car->fill($request->validated());
+        return $car->save();
     }
 
     /**
@@ -58,8 +61,11 @@ class CarsController extends Controller
      * @param  \App\Models\Cars  $cars
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cars $cars)
+    public function destroy(int $id)
     {
-        //
+        if (!Cars::destroy($id)) {
+            return response('not found', 404);
+        }
+        return response('delete was successed', 201);;
     }
 }
